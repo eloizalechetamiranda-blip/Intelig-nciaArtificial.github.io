@@ -1,111 +1,399 @@
-import os from openai import OpenAI
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NovaAI - Inteligência Artificial</title>
 
-==========================================
-NOVAAI - INTELIGÊNCIA ARTIFICIAL
-==========================================
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-class NovaAI:
+body {
+    font-family: Arial, sans-serif;
+    background: #0b1020;
+    color: white;
+    height: 100vh;
+    display: flex;
+}
 
-def __init__(self):
-    self.nome = "NovaAI"
-    self.historico = []
+.sidebar {
+    width: 250px;
+    background: #111827;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
 
-    chave = os.getenv("OPENAI_API_KEY")
+.logo {
+    font-size: 27px;
+    font-weight: bold;
+    color: #60a5fa;
+    margin-bottom: 15px;
+}
 
-    if not chave:
-        raise ValueError(
-            "Configure a variável OPENAI_API_KEY."
-        )
+button {
+    cursor: pointer;
+    border: none;
+    border-radius: 9px;
+    padding: 12px;
+    font-size: 14px;
+}
 
-    self.client = OpenAI(api_key=chave)
+.new-chat {
+    background: #2563eb;
+    color: white;
+}
 
-def responder(self, pergunta):
+.new-chat:hover {
+    background: #1d4ed8;
+}
 
-    try:
-        self.historico.append({
-            "role": "user",
-            "content": pergunta
-        })
+.sidebar p {
+    color: #9ca3af;
+    font-size: 13px;
+}
 
-        resposta = self.client.responses.create(
-            model="gpt-4.1-mini",
-            instructions="""
-            Você é a NovaAI, uma inteligência artificial
-            avançada, educada, inteligente e prestativa.
+.main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
 
-            Suas funções são:
-            - Responder perguntas.
-            - Criar textos.
-            - Ensinar matérias.
-            - Ajudar com programação.
-            - Desenvolver ideias.
-            - Resolver problemas.
-            - Auxiliar em projetos.
+header {
+    padding: 20px;
+    border-bottom: 1px solid #273449;
+    font-size: 19px;
+    font-weight: bold;
+}
 
-            Responda sempre em português,
-            de maneira clara e organizada.
-            """,
-            input=self.historico
-        )
+#messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
 
-        texto = resposta.output_text
+.message {
+    max-width: 800px;
+    width: fit-content;
+    padding: 15px 18px;
+    border-radius: 14px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
 
-        self.historico.append({
-            "role": "assistant",
-            "content": texto
-        })
+.user {
+    align-self: flex-end;
+    background: #2563eb;
+}
 
-        return texto
+.bot {
+    align-self: flex-start;
+    background: #1e293b;
+}
 
-    except Exception as erro:
-        return f"Erro na NovaAI: {erro}"
+.welcome {
+    text-align: center;
+    margin: auto;
+    color: #dbeafe;
+}
 
-def limpar_memoria(self):
-    self.historico = []
-    return "Memória da conversa limpa!"
+.welcome h1 {
+    font-size: 36px;
+    margin-bottom: 12px;
+}
 
-def iniciar(self):
+.welcome p {
+    color: #94a3b8;
+}
 
-    print("=" * 50)
-    print("          NOVAAI - SUA INTELIGÊNCIA")
-    print("=" * 50)
-    print("Olá! Eu sou a NovaAI.")
-    print("Estou pronta para ajudar você!")
-    print("\nComandos:")
-    print("/sair - Encerrar")
-    print("/limpar - Limpar memória")
-    print("=" * 50)
+.input-area {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    border-top: 1px solid #273449;
+}
 
-    while True:
+.input-area input {
+    width: 75%;
+    max-width: 750px;
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px solid #334155;
+    background: #1e293b;
+    color: white;
+    outline: none;
+    font-size: 16px;
+}
 
-        pergunta = input("\nVocê: ").strip()
+.send {
+    background: #2563eb;
+    color: white;
+    min-width: 65px;
+}
 
-        if not pergunta:
-            continue
+.send:hover {
+    background: #1d4ed8;
+}
 
-        if pergunta.lower() == "/sair":
-            print("\nNovaAI: Até logo!")
-            break
+footer {
+    text-align: center;
+    padding: 8px;
+    color: #64748b;
+    font-size: 11px;
+}
 
-        if pergunta.lower() == "/limpar":
-            print(self.limpar_memoria())
-            continue
+@media(max-width: 650px) {
+    .sidebar {
+        width: 65px;
+        padding: 10px;
+        align-items: center;
+    }
 
-        print("\nNovaAI: ", end="", flush=True)
+    .logo {
+        font-size: 17px;
+    }
 
-        resposta = self.responder(pergunta)
+    .sidebar p {
+        display: none;
+    }
 
-        print(resposta)
+    .new-chat {
+        font-size: 11px;
+        padding: 10px 5px;
+    }
 
-==========================================
-EXECUÇÃO DO PROGRAMA
-==========================================
+    #messages {
+        padding: 15px;
+    }
 
-if name == "main":
+    .welcome h1 {
+        font-size: 27px;
+    }
 
-try:
-    ia = NovaAI()
-    ia.iniciar()
+    .input-area {
+        padding: 12px;
+    }
 
-except Exception as erro:
-    print(f"Não foi possível iniciar: {erro}")
+    .input-area input {
+        width: 100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<aside class="sidebar">
+
+    <div class="logo">✦ NovaAI</div>
+
+    <button class="new-chat" onclick="novaChat.novaConversa()">
+        + Nova conversa
+    </button>
+
+    <p>Sua inteligência artificial pessoal.</p>
+
+</aside>
+
+<main class="main">
+
+    <header>
+        ✦ NovaAI <span style="color:#60a5fa">• Assistente</span>
+    </header>
+
+    <section id="messages">
+
+        <div class="welcome" id="welcome">
+            <h1>Olá! Eu sou a NovaAI ✨</h1>
+            <p>Como posso ajudar você hoje?</p>
+        </div>
+
+    </section>
+
+    <div class="input-area">
+
+        <input
+            id="question"
+            type="text"
+            placeholder="Pergunte qualquer coisa..."
+            autocomplete="off"
+        >
+
+        <button class="send" onclick="novaChat.enviar()">
+            ➤
+        </button>
+
+    </div>
+
+    <footer>
+        NovaAI © 2026 — Inteligência artificial experimental.
+    </footer>
+
+</main>
+
+<script>
+
+const novaChat = {
+
+    historico: [],
+
+    enviar: function() {
+
+        const input = document.getElementById("question");
+        const pergunta = input.value.trim();
+
+        if (!pergunta) return;
+
+        input.value = "";
+
+        const welcome = document.getElementById("welcome");
+
+        if (welcome) welcome.remove();
+
+        this.adicionarMensagem(pergunta, "user");
+
+        this.historico.push({
+            usuario: pergunta
+        });
+
+        this.mostrarDigitando();
+
+        setTimeout(() => {
+
+            this.removerDigitando();
+
+            const resposta = this.pensar(pergunta);
+
+            this.adicionarMensagem(resposta, "bot");
+
+            this.historico.push({
+                assistente: resposta
+            });
+
+        }, 700);
+
+    },
+
+    adicionarMensagem: function(texto, tipo) {
+
+        const area = document.getElementById("messages");
+
+        const mensagem = document.createElement("div");
+
+        mensagem.className = "message " + tipo;
+        mensagem.textContent = texto;
+
+        area.appendChild(mensagem);
+
+        area.scrollTop = area.scrollHeight;
+
+    },
+
+    mostrarDigitando: function() {
+
+        const area = document.getElementById("messages");
+
+        const digitando = document.createElement("div");
+
+        digitando.id = "digitando";
+        digitando.className = "message bot";
+        digitando.textContent = "NovaAI está pensando...";
+
+        area.appendChild(digitando);
+
+    },
+
+    removerDigitando: function() {
+
+        const elemento = document.getElementById("digitando");
+
+        if (elemento) elemento.remove();
+
+    },
+
+    pensar: function(pergunta) {
+
+        const texto = pergunta.toLowerCase();
+
+        if (texto.includes("olá") || texto.includes("oi")) {
+            return "Olá! 😊 Sou a NovaAI. É um prazer conversar com você!";
+        }
+
+        if (texto.includes("seu nome")) {
+            return "Meu nome é NovaAI! Sou sua assistente virtual.";
+        }
+
+        if (texto.includes("quem criou")) {
+            return "Fui desenvolvida como um projeto de inteligência artificial chamado NovaAI.";
+        }
+
+        if (texto.includes("hora")) {
+            return "A hora atual do seu dispositivo é " +
+                new Date().toLocaleTimeString("pt-BR") + ".";
+        }
+
+        if (texto.includes("data")) {
+            return "Hoje é " +
+                new Date().toLocaleDateString("pt-BR") + ".";
+        }
+
+        if (texto.includes("ajuda")) {
+            return "Claro! Posso conversar com você, responder perguntas simples e ajudar com ideias. O que deseja fazer?";
+        }
+
+        if (texto.includes("programação") || texto.includes("código")) {
+            return "Programação é a arte de criar instruções para computadores. Posso ajudar você a estudar lógica, HTML, CSS, JavaScript e Python!";
+        }
+
+        if (texto.includes("obrigado") || texto.includes("obrigada")) {
+            return "Por nada! ❤️ Estou aqui para ajudar.";
+        }
+
+        if (texto.includes("tudo bem")) {
+            return "Tudo funcionando por aqui! E com você? 😊";
+        }
+
+        return "Entendi sua mensagem! 😊\n\nSou a NovaAI, uma assistente experimental. Atualmente consigo responder algumas perguntas predefinidas, mas ainda não estou conectada a um modelo de inteligência artificial generativa.\n\nExperimente perguntar sobre programação, meu nome, data ou horário.";
+    },
+
+    novaConversa: function() {
+
+        this.historico = [];
+
+        document.getElementById("messages").innerHTML = `
+            <div class="welcome" id="welcome">
+                <h1>Olá! Eu sou a NovaAI ✨</h1>
+                <p>Como posso ajudar você hoje?</p>
+            </div>
+        `;
+
+    }
+
+};
+
+document.getElementById("question").addEventListener(
+    "keydown",
+    function(event) {
+
+        if (event.key === "Enter") {
+            novaChat.enviar();
+        }
+
+    }
+);
+
+</script>
+
+</body>
+</html>
